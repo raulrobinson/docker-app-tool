@@ -17,9 +17,12 @@ const ContainerList = () => {
 
     const [logModalOpen, setLogModalOpen] = useState(false);
     const [containerLogsContent, setContainerLogsContent] = useState("");
-    const [containerModalOpen, setContainerModalOpen] = useState(false);
 
     const [containerCreateModalOpen, setContainerCreateModalOpen] = useState(false);
+    //const [containerCreateModalOpen, setLogModalOpen] = useState(false);
+
+    //const [containerCreateContent, setContainerLogsContent] = useState("");
+    //const [containerCreateModalOpen, setContainerModalOpen] = useState(false);
 
     const goHome = () => {
         router.push("/dashboard");
@@ -80,10 +83,11 @@ const ContainerList = () => {
 
     const createContainer = async (data: any) => {
         try {
+            setContainerCreateModalOpen(true);
             //const response = await axios.post("/api/create-container", data);
             //if (response.status === 200) {
                 //console.log(response.data);
-                setContainerModalOpen(false);
+                //setContainerModalOpen(false);
             //}
         } catch (error) {
             console.error("Error creating container:", error);
@@ -92,10 +96,11 @@ const ContainerList = () => {
 
     return (
         <div className="flex h-screen">
-            {/* Formulario a la izquierda */}
             <div className="w-full p-4 m-8"> {/* w-2/4 or w-1/2 */}
-                <div className="flex gap-4 mb-4">
-                    <h1 className="text-2xl mb-4" onClick={goHome}>
+
+                {/* Create Container */}
+                <div className="flex items-center gap-4 mb-4">
+                    <h1 className="text-2xl" onClick={goHome}>
                         <strong className="text-blue-500">Docker</strong> Containers
                     </h1>
                     <button
@@ -105,6 +110,8 @@ const ContainerList = () => {
                         Create Container
                     </button>
                 </div>
+
+                {/* Table Containers */}
                 <table
                     className="table-auto border-collapse border border-gray-300 w-full text-sm text-center bg-white text-gray-800">
                     <thead>
@@ -124,10 +131,7 @@ const ContainerList = () => {
                             <td className="border border-gray-300 px-4 py-2">
                                 <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                    onClick={() => {
-                                        setSelectedContainer(container);
-                                        setContainerModalOpen(true);
-                                    }}
+                                    onClick={() => setSelectedContainer(container)}
                                 >
                                     Details
                                 </button>
@@ -146,7 +150,7 @@ const ContainerList = () => {
                 <CreateContainer
                     show={containerCreateModalOpen}
                     data=''
-                    onClose={() => setContainerModalOpen(false)}
+                    onClose={() => setContainerCreateModalOpen(false)}
                 />
 
                 {selectedContainer && (
@@ -208,8 +212,8 @@ const ContainerList = () => {
 
             {/* Formulario a la derecha */}
             {/*<div className="w-1/4 p-4 text-white">*/}
-                {/*<h2 className="text-lg font-bold mb-4">Crear Contenedor</h2>*/}
-                {/*<form className="space-y-4">
+            {/*<h2 className="text-lg font-bold mb-4">Crear Contenedor</h2>*/}
+            {/*<form className="space-y-4">
                     <div>
                         <label
                             htmlFor="name"
@@ -224,6 +228,7 @@ const ContainerList = () => {
                             className="mt-1 block w-full text-gray-700 text-center rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         />
                     </div>
+
                     <div className="flex gap-6">
                         <div>
                             <label

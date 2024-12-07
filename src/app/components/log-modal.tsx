@@ -5,7 +5,7 @@ const LogModal = ({show, logs, onClose}: { show: boolean; logs: string; onClose:
             style={{zIndex: 9999}}
         >
             <div
-                className="bg-white text-gray-800 w-11/12 sm:w-10/12 md:w-full p-4 rounded-lg max-h-[80vh] overflow-auto">
+                className="bg-white text-gray-800 w-11/12 sm:w-10/12 md:w-full p-4 rounded-lg max-h-[100vh] overflow-auto">
                 <div className="flex justify-between">
                     <h2 className="text-xl font-bold">Container Logs</h2>
                     <button
