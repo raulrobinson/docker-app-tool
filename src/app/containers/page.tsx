@@ -86,9 +86,19 @@ const ContainerList = () => {
         setShowContainerCreateModal(false);
     };
 
-    const handleContainerCreateSubmitModal = (data: any) => {
+    const handleContainerCreateSubmitModal = async (data: any) => {
         setContainerCreateData(data);
-        console.log('Submitted Data:', data);
+        //console.log('Submitted Data:', data);
+        await axios.post("/api/create-container", data)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setShowContainerCreateModal(false);
+                }
+            })
+            .catch((error) => {
+                console.error("Error creating container:", error);
+            });
     };
 
     /*const createContainer = async (data: any) => {

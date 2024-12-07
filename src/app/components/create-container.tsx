@@ -12,6 +12,7 @@ const CreateContainer = ({
     const [ports, setPorts] = useState([{ hostPort: '', containerPort: '' }]);
     const [envVars, setEnvVars] = useState([{ name: '', value: '' }]);
     const [name, setName] = useState('');
+    const [imageName, setImageName] = useState('');
 
     const addPort = () => {
         setPorts([...ports, { hostPort: '', containerPort: '' }]);
@@ -47,6 +48,7 @@ const CreateContainer = ({
             name,
             ports,
             envVars,
+            imageName,
         };
         onSubmit(formData);
         onClose();
@@ -151,6 +153,19 @@ const CreateContainer = ({
                         >
                             + Add Variable
                         </button>
+                    </div>
+                    <div>
+                        <label htmlFor="image-name" className="block text-sm font-medium text-gray-600">
+                            Image Name
+                        </label>
+                        <input
+                            type="text"
+                            id="image-name"
+                            value={imageName}
+                            onChange={(e) => setImageName(e.target.value)}
+                            placeholder="p. Example: postgres:latest"
+                            className="mt-1 block w-full text-gray-700 italic text-left rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        />
                     </div>
                     <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                         Crear
