@@ -350,6 +350,7 @@ const ContainerList = () => {
                     </button>
                 </form>*/}
             {/*}</div>*/}
+            <Footer/>
         </div>
     );
 }
