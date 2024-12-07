@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 
 const startContainer = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-        console.log(req.body);
+        // Send the request to the API.
         const response = await fetch(`http://localhost:8080/api/v1/docker/start`, {
             method: 'POST',
             headers: {
@@ -10,8 +10,11 @@ const startContainer = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             body: JSON.stringify(req.body)
         });
+
+        // Parse the response.
         const data = await response.json();
 
+        // Return the response.
         if (data && data.length > 0) {
             res.status(200).json(data);
         } else {

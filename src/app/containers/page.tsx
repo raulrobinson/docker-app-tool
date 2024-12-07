@@ -7,6 +7,7 @@ import Footer from "@/app/components/footer";
 import {container} from "@/app/interfaces/interfaces";
 import LogModal from "@/app/components/log-modal";
 import CreateContainer from "@/app/components/create-container";
+import StatsModal from "@/app/components/stats-modal";
 
 const ContainerList = () => {
     const router = useRouter();
@@ -20,6 +21,9 @@ const ContainerList = () => {
 
     const [showContainerCreateModal, setShowContainerCreateModal] = useState(false);
     const [containerCreateData, setContainerCreateData] = useState(null);
+
+    const [statsModalOpen, setStatsModalOpen] = useState(false);
+    const [containerStatsContent, setContainerStatsContent] = useState("");
 
     const goHome = () => {
         router.push("/dashboard");
@@ -78,6 +82,18 @@ const ContainerList = () => {
         }
     }
 
+    const containerStats = async (containerId: string) => {
+        try {
+            const response = await axios.post("/api/stats-container", {containerId});
+            const statsData = response.data[0];
+            //console.log(statsData);
+            setContainerStatsContent(statsData);
+            setStatsModalOpen(true);
+        } catch (error) {
+            console.error("Error fetching container stats:", error);
+        }
+    }
+
     const handleContainerCreateOpenModal = () => {
         setShowContainerCreateModal(true);
     };
@@ -88,11 +104,9 @@ const ContainerList = () => {
 
     const handleContainerCreateSubmitModal = async (data: any) => {
         setContainerCreateData(data);
-        //console.log('Submitted Data:', data);
         await axios.post("/api/create-container", data)
             .then((response) => {
                 if (response.status === 200) {
-                    console.log(response.data);
                     setShowContainerCreateModal(false);
                 }
             })
@@ -100,21 +114,6 @@ const ContainerList = () => {
                 console.error("Error creating container:", error);
             });
     };
-
-    /*const createContainer = async (data: any) => {
-        try {
-            setContainerCreateData(data);
-            setContainerCreateModalOpen(true);
-            console.log(data);
-            //const response = await axios.post("/api/create-container", data);
-            //if (response.status === 200) {
-                //console.log(response.data);
-                //setContainerModalOpen(false);
-            //}
-        } catch (error) {
-            console.error("Error creating container:", error);
-        }
-    }*/
 
     return (
         <div className="flex h-screen">
@@ -175,9 +174,15 @@ const ContainerList = () => {
                     onSubmit={handleContainerCreateSubmitModal}
                 />
 
+                <StatsModal
+                    show={statsModalOpen}
+                    stats={containerStatsContent}
+                    onClose={() => setStatsModalOpen(false)}
+                />
+
                 {selectedContainer && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-1/2 text-gray-900">
+                        <div className="bg-white rounded-lg shadow-lg p-6 w-2/2 text-gray-900">
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-xl font-bold">Detalles del Contenedor</h2>
                                 <button
@@ -225,6 +230,12 @@ const ContainerList = () => {
                                     onClick={() => containerLogs(selectedContainer.container_id)}
                                 >
                                     Logs
+                                </button>
+                                <button
+                                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                                    onClick={() => containerStats(selectedContainer.container_id)}
+                                >
+                                    Stats
                                 </button>
                             </div>
                         </div>
