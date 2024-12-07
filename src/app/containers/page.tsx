@@ -128,7 +128,7 @@ const ContainerList = () => {
 
     return (
         <div className="flex h-screen">
-            <div className="w-11/12 sm:w-8/12 md:w-1/2 p-0 m-2">
+            <div className="w-11/12 sm:w-8/12 md:w-1/2 p-2 m-2">
 
                 {/* Create Container */}
                 <div className="flex items-center gap-4 mb-4">
