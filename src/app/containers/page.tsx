@@ -8,6 +8,7 @@ import {container} from "@/app/interfaces/interfaces";
 import LogModal from "@/app/components/log-modal";
 import CreateContainer from "@/app/components/create-container";
 import StatsModal from "@/app/components/stats-modal";
+import Swal from 'sweetalert2';
 
 const ContainerList = () => {
     // Router.
@@ -125,6 +126,36 @@ const ContainerList = () => {
                 console.error("Error creating container:", error);
             });
     };
+
+    const confirmRemoveContainer = async (containerId: string) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!'
+        });
+
+        if (result.isConfirmed) {
+            const response = await axios.post("/api/remove-container", {containerId});
+            console.log(response);
+            if (response.data.httpStatus === "200") {
+                Swal.fire(
+                    'Deleted!',
+                    'Your container has been deleted.',
+                    'success'
+                );
+            } else {
+                Swal.fire(
+                    'Error!',
+                    'There was an error deleting the container.',
+                    'error'
+                );
+            }
+        }
+    }
 
     return (
         <div className="flex h-screen">
@@ -254,6 +285,12 @@ const ContainerList = () => {
                                     onClick={() => containerStats(selectedContainer.container_id)}
                                 >
                                     Stats
+                                </button>
+                                <button
+                                    className="bg-fuchsia-500 hover:bg-fuchsia-700 text-white font-bold py-1 px-2 rounded"
+                                    onClick={() => confirmRemoveContainer(selectedContainer.container_id)}
+                                >
+                                    Remove
                                 </button>
                             </div>
                         </div>
