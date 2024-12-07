@@ -18,11 +18,8 @@ const ContainerList = () => {
     const [logModalOpen, setLogModalOpen] = useState(false);
     const [containerLogsContent, setContainerLogsContent] = useState("");
 
-    const [containerCreateModalOpen, setContainerCreateModalOpen] = useState(false);
-    //const [containerCreateModalOpen, setLogModalOpen] = useState(false);
-
-    //const [containerCreateContent, setContainerLogsContent] = useState("");
-    //const [containerCreateModalOpen, setContainerModalOpen] = useState(false);
+    const [showContainerCreateModal, setShowContainerCreateModal] = useState(false);
+    const [containerCreateData, setContainerCreateData] = useState(null);
 
     const goHome = () => {
         router.push("/dashboard");
@@ -81,9 +78,24 @@ const ContainerList = () => {
         }
     }
 
-    const createContainer = async (data: any) => {
+    const handleContainerCreateOpenModal = () => {
+        setShowContainerCreateModal(true);
+    };
+
+    const handleContainerCreateCloseModal = () => {
+        setShowContainerCreateModal(false);
+    };
+
+    const handleContainerCreateSubmitModal = (data: any) => {
+        setContainerCreateData(data);
+        console.log('Submitted Data:', data);
+    };
+
+    /*const createContainer = async (data: any) => {
         try {
+            setContainerCreateData(data);
             setContainerCreateModalOpen(true);
+            console.log(data);
             //const response = await axios.post("/api/create-container", data);
             //if (response.status === 200) {
                 //console.log(response.data);
@@ -92,7 +104,7 @@ const ContainerList = () => {
         } catch (error) {
             console.error("Error creating container:", error);
         }
-    }
+    }*/
 
     return (
         <div className="flex h-screen">
@@ -105,7 +117,7 @@ const ContainerList = () => {
                     </h1>
                     <button
                         className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
-                        onClick={() => createContainer('')}
+                        onClick={handleContainerCreateOpenModal}
                     >
                         Create Container
                     </button>
@@ -148,9 +160,9 @@ const ContainerList = () => {
                 />
 
                 <CreateContainer
-                    show={containerCreateModalOpen}
-                    data=''
-                    onClose={() => setContainerCreateModalOpen(false)}
+                    show={showContainerCreateModal}
+                    onClose={handleContainerCreateCloseModal}
+                    onSubmit={handleContainerCreateSubmitModal}
                 />
 
                 {selectedContainer && (
