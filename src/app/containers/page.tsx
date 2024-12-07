@@ -4,36 +4,9 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import Footer from "@/app/components/footer";
-
-interface container {
-    container_id: string;
-    image: number;
-    names: string;
-    created: string;
-    since_time: string;
-    ports: string;
-    status: string;
-    command: string;
-    timestamp: string;
-}
-
-const LogModal = ({show, logs, onClose}: { show: boolean; logs: string; onClose: () => void }) => {
-    return (
-        <div
-            className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center ${show ? "" : "hidden"}`}
-            style={{zIndex: 9999}}
-        >
-            <div
-                className="bg-white text-gray-800 w-11/12 sm:w-10/12 md:w-full p-4 rounded-lg max-h-[80vh] overflow-auto">
-                <div className="flex justify-between">
-                    <h2 className="text-xl font-bold">Container Logs</h2>
-                    <button onClick={onClose} className="text-red-500 text-4xl">&times;</button>
-                </div>
-                <pre className="mt-4">{logs}</pre>
-            </div>
-        </div>
-    );
-};
+import {container} from "@/app/interfaces/interfaces";
+import LogModal from "@/app/components/log-modal";
+import CreateContainer from "@/app/components/create-container";
 
 const ContainerList = () => {
     const router = useRouter();
@@ -45,6 +18,8 @@ const ContainerList = () => {
     const [logModalOpen, setLogModalOpen] = useState(false);
     const [containerLogsContent, setContainerLogsContent] = useState("");
     const [containerModalOpen, setContainerModalOpen] = useState(false);
+
+    const [containerCreateModalOpen, setContainerCreateModalOpen] = useState(false);
 
     const goHome = () => {
         router.push("/dashboard");
@@ -103,12 +78,33 @@ const ContainerList = () => {
         }
     }
 
+    const createContainer = async (data: any) => {
+        try {
+            //const response = await axios.post("/api/create-container", data);
+            //if (response.status === 200) {
+                //console.log(response.data);
+                setContainerModalOpen(false);
+            //}
+        } catch (error) {
+            console.error("Error creating container:", error);
+        }
+    }
+
     return (
         <div className="flex h-screen">
-            <div className="w-2/3 p-4 m-8">
-                <h1 className="text-2xl mb-4" onClick={goHome}>
-                    <strong className="text-blue-500">Docker</strong> Containers
-                </h1>
+            {/* Formulario a la izquierda */}
+            <div className="w-full p-4 m-8"> {/* w-2/4 or w-1/2 */}
+                <div className="flex gap-4 mb-4">
+                    <h1 className="text-2xl mb-4" onClick={goHome}>
+                        <strong className="text-blue-500">Docker</strong> Containers
+                    </h1>
+                    <button
+                        className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
+                        onClick={() => createContainer('')}
+                    >
+                        Create Container
+                    </button>
+                </div>
                 <table
                     className="table-auto border-collapse border border-gray-300 w-full text-sm text-center bg-white text-gray-800">
                     <thead>
@@ -145,6 +141,12 @@ const ContainerList = () => {
                     show={logModalOpen}
                     logs={containerLogsContent}
                     onClose={() => setLogModalOpen(false)}
+                />
+
+                <CreateContainer
+                    show={containerCreateModalOpen}
+                    data=''
+                    onClose={() => setContainerModalOpen(false)}
                 />
 
                 {selectedContainer && (
@@ -205,9 +207,9 @@ const ContainerList = () => {
             </div>
 
             {/* Formulario a la derecha */}
-            <div className="w-1/3 p-4 text-white">
-                <h2 className="text-lg font-bold mb-4">Crear Contenedor</h2>
-                <form className="space-y-4">
+            {/*<div className="w-1/4 p-4 text-white">*/}
+                {/*<h2 className="text-lg font-bold mb-4">Crear Contenedor</h2>*/}
+                {/*<form className="space-y-4">
                     <div>
                         <label
                             htmlFor="name"
@@ -290,8 +292,8 @@ const ContainerList = () => {
                     >
                         Crear
                     </button>
-                </form>
-            </div>
+                </form>*/}
+            {/*}</div>*/}
         </div>
     );
 }
