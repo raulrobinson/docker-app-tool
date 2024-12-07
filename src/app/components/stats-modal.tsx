@@ -7,9 +7,7 @@ const StatsModal = ({
     stats: Record<string, any> | string;
     onClose: () => void;
 }) => {
-    // Si stats es un objeto, formatea como JSON string para renderizar
-    const formattedStats =
-        typeof stats === "string" ? stats : JSON.stringify(stats, null, 2);
+    const formattedStats = typeof stats === "string" ? stats : JSON.stringify(stats, null, 2);
 
     return (
         <div
@@ -23,7 +21,6 @@ const StatsModal = ({
                         &times;
                     </button>
                 </div>
-                {/* Renderiza el JSON o la cadena de stats */}
                 <pre className="mt-4 whitespace-pre-wrap break-words">
                     {formattedStats}
                 </pre>
