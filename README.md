@@ -34,6 +34,12 @@ Stats
 
 To install the tool, you can clone the repository and run the application.
 
+## Backend
+
+The backend is a simple REST API with Java Spring Boot from the repository.
+
+https://github.com/raulrobinson/java-springboot-basic
+
 ## Author
 Raul Bolivar Navas - 2024
 
