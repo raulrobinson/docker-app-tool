@@ -9,39 +9,47 @@ const CreateContainer = ({
     onClose: () => void;
     onSubmit: (data: any) => void;
 }) => {
+    // State for the form fields.
     const [ports, setPorts] = useState([{ hostPort: '', containerPort: '' }]);
     const [envVars, setEnvVars] = useState([{ name: '', value: '' }]);
     const [name, setName] = useState('');
     const [imageName, setImageName] = useState('');
 
+    // Functions to add and remove ports and environment variables
     const addPort = () => {
         setPorts([...ports, { hostPort: '', containerPort: '' }]);
     };
 
+    // Function to add environment variables
     const addEnvVar = () => {
         setEnvVars([...envVars, { name: '', value: '' }]);
     };
 
+    // Functions to handle changes in the form fields
     const handlePortChange = (index: number, field: 'hostPort' | 'containerPort', value: string) => {
         const updatedPorts = [...ports];
         updatedPorts[index][field] = value;
         setPorts(updatedPorts);
     };
 
+    // Function to handle changes in the environment variables
     const handleEnvVarChange = (index: number, field: 'name' | 'value', value: string) => {
         const updatedVars = [...envVars];
         updatedVars[index][field] = value;
         setEnvVars(updatedVars);
     };
 
+    // Functions to remove ports and environment variables
     const removePort = (index: number) => {
         setPorts(ports.filter((_, i) => i !== index));
     };
 
+    // Function to remove environment variables
     const removeEnvVar = (index: number) => {
         setEnvVars(envVars.filter((_, i) => i !== index));
     };
 
+    // Function to handle the form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const formData = {

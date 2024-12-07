@@ -10,9 +10,11 @@ import CreateContainer from "@/app/components/create-container";
 import StatsModal from "@/app/components/stats-modal";
 
 const ContainerList = () => {
+    // Router.
     const router = useRouter();
     const [error, setError] = useState('');
 
+    // State variables.
     const [AllContainers, setAllContainers] = useState<container[]>([]);
     const [selectedContainer, setSelectedContainer] = useState<any | null>(null);
 
@@ -25,10 +27,12 @@ const ContainerList = () => {
     const [statsModalOpen, setStatsModalOpen] = useState(false);
     const [containerStatsContent, setContainerStatsContent] = useState("");
 
+    // Function to go back to the home page.
     const goHome = () => {
         router.push("/dashboard");
     };
 
+    // Fetch all containers.
     useEffect(() => {
         fetchContainers();
         const interval = setInterval(() => {
@@ -37,6 +41,7 @@ const ContainerList = () => {
         return () => clearInterval(interval);
     }, []);
 
+    // Fetch all containers.
     const fetchContainers = async () => {
         await axios.get("/api/get-containers")
             .then((response) => {
@@ -48,6 +53,7 @@ const ContainerList = () => {
             })
     };
 
+    // Start a container.
     const startContainer = async (containerId: string) => {
         await axios.post("/api/start-container", {containerId})
             .then((response) => {
@@ -59,6 +65,7 @@ const ContainerList = () => {
             })
     }
 
+    // Stop a container.
     const stopContainer = async (containerId: string) => {
         await axios.post("/api/stop-container", {containerId})
             .then((response) => {
@@ -70,6 +77,7 @@ const ContainerList = () => {
             })
     }
 
+    // Fetch container logs.
     const containerLogs = async (containerId: string) => {
         try {
             const response = await axios.post("/api/logs-container", {containerId});
@@ -82,11 +90,11 @@ const ContainerList = () => {
         }
     }
 
+    // Fetch container stats.
     const containerStats = async (containerId: string) => {
         try {
             const response = await axios.post("/api/stats-container", {containerId});
             const statsData = response.data[0];
-            //console.log(statsData);
             setContainerStatsContent(statsData);
             setStatsModalOpen(true);
         } catch (error) {
@@ -94,14 +102,17 @@ const ContainerList = () => {
         }
     }
 
+    // Create Container Modal Handlers - Open.
     const handleContainerCreateOpenModal = () => {
         setShowContainerCreateModal(true);
     };
 
+    // Create Container Modal Handlers - Close.
     const handleContainerCreateCloseModal = () => {
         setShowContainerCreateModal(false);
     };
 
+    // Create Container Modal Handlers - Submit.
     const handleContainerCreateSubmitModal = async (data: any) => {
         setContainerCreateData(data);
         await axios.post("/api/create-container", data)
@@ -117,7 +128,7 @@ const ContainerList = () => {
 
     return (
         <div className="flex h-screen">
-            <div className="w-full p-4 m-8"> {/* w-2/4 or w-1/2 */}
+            <div className="w-11/12 sm:w-8/12 md:w-1/2 p-0 m-2">
 
                 {/* Create Container */}
                 <div className="flex items-center gap-4 mb-4">
@@ -162,27 +173,32 @@ const ContainerList = () => {
                     </tbody>
                 </table>
 
+                {/* Log Modal */}
                 <LogModal
                     show={logModalOpen}
                     logs={containerLogsContent}
                     onClose={() => setLogModalOpen(false)}
                 />
 
+                {/* Create Container Modal */}
                 <CreateContainer
                     show={showContainerCreateModal}
                     onClose={handleContainerCreateCloseModal}
                     onSubmit={handleContainerCreateSubmitModal}
                 />
 
+                {/* Stats Modal */}
                 <StatsModal
                     show={statsModalOpen}
                     stats={containerStatsContent}
                     onClose={() => setStatsModalOpen(false)}
                 />
 
+                {/* Selected Container Modal */}
                 {selectedContainer && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                         <div className="bg-white rounded-lg shadow-lg p-6 w-2/2 text-gray-900">
+                            {/* Header */}
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-xl font-bold">Detalles del Contenedor</h2>
                                 <button
@@ -192,6 +208,7 @@ const ContainerList = () => {
                                     &times;
                                 </button>
                             </div>
+                            {/* Content */}
                             <ul className="space-y-2">
                                 <li><strong>Imagen:</strong> {selectedContainer.image}</li>
                                 <li><strong>Creado:</strong> {selectedContainer.created}</li>
@@ -202,6 +219,7 @@ const ContainerList = () => {
                                 <li><strong>ID:</strong> {selectedContainer.container_id}</li>
                                 <li><strong>Timestamp:</strong> {selectedContainer.timestamp}</li>
                             </ul>
+                            {/* Buttons */}
                             <div className="mt-6 flex gap-4">
                                 <button
                                     className={`px-4 py-2 rounded text-white ${
